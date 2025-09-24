@@ -1,0 +1,76 @@
+{
+  "compilerOptions": {
+    // Target and module settings
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+
+    // Output settings
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Module resolution
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // Strict type checking (enhanced for security)
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // Additional security-focused checks
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Code quality and safety
+    "exactOptionalPropertyTypes": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+
+    // Import/export safety
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+
+    // Performance and compatibility
+    "skipLibCheck": true,
+    "isolatedModules": true,
+
+    // Type information
+    "types": ["node"],
+
+    // Security-focused compiler flags
+    "removeComments": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  // Additional TypeScript project references for better build performance
+  "compileOnSave": false,
+  // Type acquisition settings for security
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": ["*"]
+  }
+}
