@@ -28,7 +28,7 @@ async function main(): Promise<void> {
     // Create MCP server
     const server = new McpServer({
       name: 'teamcity-mcp-simple',
-      version: '4.0.0'
+      version: '4.1.0'
     });
 
     // Register SINGLE tool that leverages Claude's NLP directly
@@ -132,6 +132,12 @@ async function main(): Promise<void> {
             return await listTestFailures(params);
           }
 
+          // Artifacts
+          if (lowerAction.includes('artifact')) {
+            params.action = action; // Pass original action for build ID extraction
+            return await listBuildArtifacts(params);
+          }
+
           // Changes/Commits
           if (lowerAction.includes('change') || lowerAction.includes('commit')) {
             return await listChanges(params);
@@ -152,6 +158,7 @@ async function main(): Promise<void> {
                   'show failed builds from last 24 hours',
                   'trigger build for MyApp on staging branch',
                   'get build log for #12345 (last 50 lines)',
+                  'show artifacts for build #8507',
                   'list all connected agents',
                   'cancel all queued builds',
                   'show recent changes',
@@ -341,6 +348,108 @@ async function main(): Promise<void> {
           text: JSON.stringify(result)
         }]
       };
+    }
+
+    async function listBuildArtifacts(params: any) {
+      if (!params.buildId) {
+        // Try to extract build ID from the action text
+        const buildIdMatch = params.action?.match(/#?(\d+)/);
+        if (buildIdMatch) {
+          params.buildId = buildIdMatch[1];
+        } else {
+          return {
+            content: [{
+              type: 'text' as const,
+              text: JSON.stringify({
+                error: 'Build ID required',
+                message: 'Please specify a build ID to list artifacts',
+                examples: [
+                  'show artifacts for build #8507',
+                  'list artifacts for build 183537'
+                ]
+              })
+            }],
+            isError: true
+          };
+        }
+      }
+
+      let actualBuildId = params.buildId;
+
+      // If the build ID looks like a build number (e.g., 8507), try to find the actual build ID
+      if (params.buildId && /^\d+$/.test(params.buildId)) {
+        try {
+          const builds = await teamCityClient.get('/builds', {
+            locator: `number:${params.buildId},count:1`
+          });
+
+          if (builds && (builds as any).build && (builds as any).build.length > 0) {
+            actualBuildId = (builds as any).build[0].id;
+          }
+        } catch (error) {
+          // If we can't find by number, try the original ID
+        }
+      }
+
+      try {
+        const result = await teamCityClient.get(`/builds/id:${actualBuildId}/artifacts/children`);
+
+        // Parse and format the response (JSON from client)
+        if (result && typeof result === 'object' && (result as any).file) {
+          const files = ((result as any).file || []).map((file: any) => ({
+            name: file.name,
+            size: file.size,
+            sizeFormatted: formatBytes(file.size),
+            modificationTime: file.modificationTime
+          }));
+
+          const totalSize = files.reduce((sum: number, file: any) => sum + file.size, 0);
+
+          return {
+            content: [{
+              type: 'text' as const,
+              text: JSON.stringify({
+                buildId: actualBuildId,
+                buildNumber: params.buildId,
+                artifactCount: files.length,
+                totalSize: formatBytes(totalSize),
+                artifacts: files
+              })
+            }]
+          };
+        }
+
+        return {
+          content: [{
+            type: 'text' as const,
+            text: JSON.stringify(result)
+          }]
+        };
+      } catch (error: any) {
+        if (error.message?.includes('404')) {
+          return {
+            content: [{
+              type: 'text' as const,
+              text: JSON.stringify({
+                error: 'Build not found',
+                buildId: actualBuildId,
+                buildNumber: params.buildId,
+                message: 'The specified build ID was not found or has no artifacts'
+              })
+            }],
+            isError: true
+          };
+        }
+        throw error;
+      }
+    }
+
+    function formatBytes(bytes: number): string {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
 
     async function getServerInfo() {

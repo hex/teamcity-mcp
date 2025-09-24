@@ -147,9 +147,9 @@ The TeamCity MCP server provides a single natural language tool that understands
 - "analyze test failures in recent builds"
 
 **Artifact Management:**
-- "download test reports from latest build"
-- "show artifacts for build 12345"
-- "get artifact metadata"
+- "show artifacts for build #8507"
+- "list artifacts for build 12345"
+- "get artifact metadata from latest build"
 
 ## Authentication
 
