@@ -90,12 +90,18 @@ async function main(): Promise<void> {
               // Claude provides: buildId, tail, lineCount
               return await getBuildLog(params);
             }
-            if (lowerAction.includes('queue')) {
-              return await listQueuedBuilds(params);
-            }
-
-            // Detect failed builds request and auto-set status
-            if (lowerAction.includes('fail')) {
+            // Handle specific build state requests first
+            if (lowerAction.includes('running') || lowerAction.includes('active') || lowerAction.includes('current')) {
+              params.state = 'running';
+              params.count = params.count || 10;
+            } else if (lowerAction.includes('queue') && !lowerAction.includes('log')) {
+              // Use dedicated queue function for pure queue requests
+              if (lowerAction.includes('queue') && !lowerAction.includes('running') && !lowerAction.includes('build')) {
+                return await listQueuedBuilds(params);
+              }
+              params.state = 'queued';
+              params.count = params.count || 10;
+            } else if (lowerAction.includes('fail')) {
               params.status = 'FAILURE';
               params.count = params.count || 20;
             }
