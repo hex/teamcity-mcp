@@ -53,7 +53,33 @@ async function main(): Promise<void> {
           // Builds
           if (lowerAction.includes('build')) {
             if (lowerAction.includes('trigger') || lowerAction.includes('start')) {
-              // Claude provides: buildTypeId/projectName, branch, comment
+              // Auto-extract build type ID from action if not provided by Claude
+              if (!params.buildTypeId && !params.projectName) {
+                // Look for known build patterns in the action
+                const buildTypePatterns = [
+                  /WarAndPeace_Staging_Android_DevelopmentBuild/i,
+                  /WarAndPeace_Staging_IOS_DevelopmentBuild/i,
+                  /wap.android.staging/i,
+                  /war.?and.?peace.*android.*staging/i
+                ];
+
+                for (const pattern of buildTypePatterns) {
+                  if (pattern.test(lowerAction)) {
+                    if (pattern.source.toLowerCase().includes('android')) {
+                      params.buildTypeId = 'WarAndPeace_Staging_Android_DevelopmentBuild';
+                    } else if (pattern.source.toLowerCase().includes('ios')) {
+                      params.buildTypeId = 'WarAndPeace_Staging_IOS_DevelopmentBuild';
+                    }
+                    break;
+                  }
+                }
+
+                // Extract branch if mentioned
+                if (lowerAction.includes('dev')) params.branch = 'dev';
+                if (lowerAction.includes('master') || lowerAction.includes('main')) params.branch = 'master';
+                if (lowerAction.includes('staging')) params.branch = params.branch || 'dev';
+              }
+
               return await triggerBuild(params);
             }
             if (lowerAction.includes('cancel') || lowerAction.includes('stop')) {
@@ -171,7 +197,19 @@ async function main(): Promise<void> {
         return {
           content: [{
             type: 'text' as const,
-            text: 'Please specify a build type ID or project name'
+            text: JSON.stringify({
+              error: 'Build trigger requires specific build type ID',
+              message: 'Please specify a build type ID or project name',
+              examples: [
+                'trigger WarAndPeace_Staging_Android_DevelopmentBuild on dev branch',
+                'start wap android staging build',
+                'trigger build for WarAndPeace iOS staging'
+              ],
+              available_builds: [
+                'WarAndPeace_Staging_Android_DevelopmentBuild',
+                'WarAndPeace_Staging_IOS_DevelopmentBuild'
+              ]
+            })
           }],
           isError: true
         };
