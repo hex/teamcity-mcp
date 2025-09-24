@@ -1,6 +1,6 @@
 {
   "name": "@hexaust/teamcity-mcp",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "TeamCity MCP server for Model Context Protocol integration",
   "publishConfig": {
     "access": "public"
