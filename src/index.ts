@@ -67,6 +67,13 @@ async function main(): Promise<void> {
             if (lowerAction.includes('queue')) {
               return await listQueuedBuilds(params);
             }
+
+            // Detect failed builds request and auto-set status
+            if (lowerAction.includes('fail')) {
+              params.status = 'FAILURE';
+              params.count = params.count || 20;
+            }
+
             // Default: list builds with Claude-provided filters
             return await listBuilds(params);
           }
@@ -81,8 +88,15 @@ async function main(): Promise<void> {
             return await listAgents(params);
           }
 
+          // Handle "show me failed builds" without "build" keyword
+          if (lowerAction.includes('fail') && !lowerAction.includes('test')) {
+            params.status = 'FAILURE';
+            params.count = params.count || 20;
+            return await listBuilds(params);
+          }
+
           // Tests
-          if (lowerAction.includes('test') || lowerAction.includes('fail')) {
+          if (lowerAction.includes('test')) {
             return await listTestFailures(params);
           }
 
