@@ -28,7 +28,7 @@ async function main(): Promise<void> {
     // Create MCP server
     const server = new McpServer({
       name: 'teamcity-mcp-simple',
-      version: '4.1.0'
+      version: '4.1.2'
     });
 
     // Register SINGLE tool that leverages Claude's NLP directly
@@ -172,10 +172,7 @@ async function main(): Promise<void> {
 
         } catch (error) {
           const safeError = createSafeError(error, { operation: 'teamcity', userInput: input });
-          return {
-            content: [{ type: 'text' as const, text: safeError.message }],
-            isError: true
-          };
+          throw new Error(safeError.message);
         }
       }
     );
@@ -207,25 +204,19 @@ async function main(): Promise<void> {
 
     async function triggerBuild(params: any) {
       if (!params.buildTypeId && !params.projectName) {
-        return {
-          content: [{
-            type: 'text' as const,
-            text: JSON.stringify({
-              error: 'Build trigger requires specific build type ID',
-              message: 'Please specify a build type ID or project name',
-              examples: [
-                'trigger WarAndPeace_Staging_Android_DevelopmentBuild on dev branch',
-                'start wap android staging build',
-                'trigger build for WarAndPeace iOS staging'
-              ],
-              available_builds: [
-                'WarAndPeace_Staging_Android_DevelopmentBuild',
-                'WarAndPeace_Staging_IOS_DevelopmentBuild'
-              ]
-            })
-          }],
-          isError: true
-        };
+        throw new Error(JSON.stringify({
+          error: 'Build trigger requires specific build type ID',
+          message: 'Please specify a build type ID or project name',
+          examples: [
+            'trigger WarAndPeace_Staging_Android_DevelopmentBuild on dev branch',
+            'start wap android staging build',
+            'trigger build for WarAndPeace iOS staging'
+          ],
+          available_builds: [
+            'WarAndPeace_Staging_Android_DevelopmentBuild',
+            'WarAndPeace_Staging_IOS_DevelopmentBuild'
+          ]
+        }));
       }
 
       const buildRequest: any = {
@@ -357,20 +348,14 @@ async function main(): Promise<void> {
         if (buildIdMatch) {
           params.buildId = buildIdMatch[1];
         } else {
-          return {
-            content: [{
-              type: 'text' as const,
-              text: JSON.stringify({
-                error: 'Build ID required',
-                message: 'Please specify a build ID to list artifacts',
-                examples: [
-                  'show artifacts for build #8507',
-                  'list artifacts for build 183537'
-                ]
-              })
-            }],
-            isError: true
-          };
+          throw new Error(JSON.stringify({
+            error: 'Build ID required',
+            message: 'Please specify a build ID to list artifacts',
+            examples: [
+              'show artifacts for build #8507',
+              'list artifacts for build 183537'
+            ]
+          }));
         }
       }
 
@@ -427,18 +412,12 @@ async function main(): Promise<void> {
         };
       } catch (error: any) {
         if (error.message?.includes('404')) {
-          return {
-            content: [{
-              type: 'text' as const,
-              text: JSON.stringify({
-                error: 'Build not found',
-                buildId: actualBuildId,
-                buildNumber: params.buildId,
-                message: 'The specified build ID was not found or has no artifacts'
-              })
-            }],
-            isError: true
-          };
+          throw new Error(JSON.stringify({
+            error: 'Build not found',
+            buildId: actualBuildId,
+            buildNumber: params.buildId,
+            message: 'The specified build ID was not found or has no artifacts'
+          }));
         }
         throw error;
       }
