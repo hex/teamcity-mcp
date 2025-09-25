@@ -41,7 +41,7 @@ async function main(): Promise<void> {
     // Create MCP server
     const server = new McpServer({
       name: 'teamcity-mcp-simple',
-      version: '4.2.1'
+      version: '4.2.3'
     });
 
     // Register SINGLE tool that leverages Claude's NLP directly
@@ -52,7 +52,7 @@ async function main(): Promise<void> {
         description: 'Natural language TeamCity operations. Examples: "show failed builds", "trigger MyApp build on staging", "get build #123 log", "list agents", "cancel queued builds"',
         inputSchema: {
           action: z.string().describe('What you want to do with TeamCity in natural language'),
-          params: z.any().optional().describe('Optional parameters extracted from the natural language request')
+          params: z.record(z.any()).optional().describe('Optional parameters extracted from the natural language request')
         }
       },
       async (input) => {
@@ -162,6 +162,11 @@ async function main(): Promise<void> {
           };
 
         } catch (error) {
+          // Check if it's already an MCP error and preserve the error code
+          if (error && typeof error === 'object' && 'code' in error) {
+            throw error; // Re-throw MCP errors as-is
+          }
+          
           const safeError = createSafeError(error, { operation: 'teamcity', userInput: input });
           throw createMcpError(safeError.message, ErrorCode.InternalError, {
             operation: 'teamcity_tool',
