@@ -1,0 +1,58 @@
+{
+  "name": "@hexaust/teamcity-mcp",
+  "version": "4.2.1",
+  "description": "TeamCity MCP server for Model Context Protocol integration",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "mcp",
+    "teamcity",
+    "ci",
+    "cd",
+    "model-context-protocol"
+  ],
+  "author": "Alex Geana",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "teamcity-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.7.2",
+    "p-retry": "^7.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hex/teamcity-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hex/teamcity-mcp/issues"
+  },
+  "homepage": "https://github.com/hex/teamcity-mcp#readme"
+}

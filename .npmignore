@@ -1,0 +1,10 @@
+.env*
+*.log
+.DS_Store
+.claude/
+_docs/
+test/
+CLAUDE.md
+TODO.md
+todo
+.idea/
