@@ -1,4 +1,4 @@
-# TeamCity MCP v1.1.0 - Claude Desktop Testing Guide
+# TeamCity MCP v4.2.3 - Claude Desktop Setup Guide
 
 ## 🎯 Quick Setup
 
@@ -25,289 +25,232 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 After updating the configuration, fully quit and restart Claude Desktop for changes to take effect.
 
 ### 3. Verify Connection
-Start a new conversation and say:
+Start a new conversation and ask:
 ```
-Can you check if TeamCity is connected?
-```
-
----
-
-## 🆕 Testing v1.1.0 Features
-
-### 1. 🗣️ Natural Language Queries
-Instead of using tool syntax, just ask naturally:
-
-```
-Show me builds from yesterday
-```
-
-```
-Why did the iOS build fail?
-```
-
-```
-Find builds in the last 2 hours
-```
-
-```
-What's the status of build #12345?
-```
-
-```
-Deploy to staging environment
-```
-
-### 2. 🧙 Interactive Wizards
-
-#### Setup Wizard (First-time setup)
-```
-Start the TeamCity setup wizard
-```
-This will:
-- Test your connection
-- Show you available projects
-- Let you explore builds, queue, and agents
-- Guide you through initial exploration
-
-#### Investigation Wizard (Debug failures)
-```
-Help me investigate why my build failed
-```
-Or if you know the build:
-```
-Investigate build #12345
-```
-This will:
-- Analyze the build failure
-- Show test failures and logs
-- Provide suggestions for fixes
-- Offer to compare with previous builds
-
-#### Deployment Wizard
-```
-Guide me through deploying to production
-```
-This will:
-- List available environments
-- Find deployment configurations
-- Trigger the deployment
-- Monitor progress
-
-### 3. 🔄 Workflow Automation
-
-#### Analyze Failed Build
-```
-Analyze the latest failed build comprehensively
-```
-This combines:
-- Build details
-- Test failures
-- Last 100 lines of logs
-- Recent changes
-- Build problems
-
-#### Monitor Build in Real-time
-```
-Monitor build #12345 until it completes
-```
-This will:
-- Check status every 30 seconds
-- Show progress updates
-- Alert when complete
-- Display final results
-
-#### Compare Builds
-```
-Compare build #12345 with build #12344
-```
-Shows side-by-side:
-- Status differences
-- Test results comparison
-- Duration changes
-- Problem differences
-
-#### Find Breaking Change
-```
-What commit broke the MainProject build?
-```
-This will:
-- Find last successful build
-- List commits between success and failure
-- Identify likely culprit
-
-### 4. 📊 Live Status Resources
-
-#### Current Build Status Dashboard
-```
-Show me the current build status dashboard
-```
-
-#### Project Hierarchy
-```
-Display the project structure
-```
-
-#### Agent Pool Status
-```
-What's the status of our build agents?
-```
-
-#### Current Problems
-```
-Show me all current build problems
-```
-
-### 5. 🎯 Context-Aware Commands
-
-The server now remembers your context:
-
-```
-Show builds for ProjectX
-[Server remembers ProjectX]
-
-Trigger a build
-[Uses ProjectX automatically]
-
-Show me the log
-[Uses last build automatically]
+Can you list my TeamCity projects?
 ```
 
 ---
 
-## 📝 Example Conversation Flow
+## 🚀 Natural Language TeamCity Operations
 
-Here's a natural conversation you can have:
+The v4.2.3 server uses a **single intelligent tool** that understands natural language requests. No need to remember specific commands - just ask naturally!
 
-**You:** "What's happening with our builds today?"
+### 📋 Project & Build Management
 
-**Claude:** [Shows recent builds with status indicators]
+**List Projects:**
+```
+Show me all TeamCity projects
+```
 
-**You:** "Why did the iOS build fail?"
+**View Recent Builds:**
+```
+Show me recent builds
+Show failed builds from yesterday
+List running builds
+```
 
-**Claude:** [Analyzes the failure, shows test results and logs]
+**Get Build Details:**
+```
+Show me build #12345
+What's the status of the latest build?
+Get details for the last failed build
+```
 
-**You:** "Can you find what commit broke it?"
+**View Build Logs:**
+```
+Show me the log for build #12345
+Get the last 50 lines of the build log
+Show me logs for the latest failed build
+```
 
-**Claude:** [Runs breaking change finder, identifies the commit]
+### 🏗️ Build Operations
 
-**You:** "Trigger a rebuild with that commit reverted"
+**Trigger Builds:**
+```
+Trigger a build for MyProject on dev branch
+Start a build for MyProject_Android
+Trigger MyProject on staging branch
+```
 
-**Claude:** [Triggers build with appropriate parameters]
+**Cancel Builds:**
+```
+Cancel build #12345
+Stop all queued builds
+Cancel the running build
+```
 
-**You:** "Monitor it and let me know when it's done"
+### 👥 Agent Management
 
-**Claude:** [Monitors build progress, updates you]
+**View Agents:**
+```
+Show me all build agents
+List connected agents
+What agents are available?
+```
+
+### 📊 Queue Management
+
+**View Build Queue:**
+```
+Show me the build queue
+List queued builds
+What builds are waiting?
+```
+
+### 🧪 Test Results
+
+**View Test Failures:**
+```
+Show test failures for build #12345
+What tests failed in the latest build?
+```
+
+### 📦 Artifacts
+
+**View Build Artifacts:**
+```
+Show artifacts for build #8507
+List artifacts for build #12345
+```
+
+### 📝 Changes & Commits
+
+**View Recent Changes:**
+```
+Show recent changes
+List commits for build #12345
+What changed in the latest build?
+```
+
+### ℹ️ Server Information
+
+**Get Server Details:**
+```
+Show TeamCity server information
+What version is the server running?
+```
 
 ---
 
-## 🧪 Testing Each Feature Category
+## 📊 Live Status Resources
 
-### Test Retry & Caching (Automatic)
-The retry mechanism works automatically for transient failures:
-- Try disconnecting network briefly during a request
-- The server will retry with exponential backoff
-- Successful responses are cached for 5 minutes
+The server provides live dashboard resources that you can access:
 
-### Test Natural Language Understanding
-Try variations of the same request:
+### TeamCity Status Overview
 ```
-"Show me the builds"
-"List all builds"
-"What builds do we have?"
-"Get me the build list"
+Show me the TeamCity status dashboard
 ```
-All should work similarly!
+Provides:
+- Server status
+- Running builds count
+- Queued builds count
+- Agent availability
+- Live build information
 
-### Test Fuzzy Matching
-Intentionally misspell project names:
+### Recent Builds Dashboard
 ```
-"Show builds for MianProjcet"  (instead of MainProject)
+Show me the recent builds dashboard
 ```
-The fuzzy search will find the closest match!
-
-### Test Time Parsing
-Use natural time expressions:
-```
-"Show builds from last Monday"
-"Get failures from this morning"
-"List builds between 2pm and 4pm"
-"What failed yesterday afternoon?"
-```
+Displays the latest 20 builds with status and timestamps.
 
 ---
 
-## 🎨 Response Formatting
+## 💡 Natural Language Examples
 
-Responses now include:
-- ✅ ❌ ⚠️ Status emojis
-- 📊 Progress bars for builds
-- 🔍 Highlighted important information
-- 📝 Structured sections
-- 🚀 Action indicators
+The server understands context and natural variations:
 
----
+**Build Status Queries:**
+- "What's happening with our builds?"
+- "Show me failed builds from last 24 hours"
+- "Are there any builds running right now?"
+- "What's in the build queue?"
 
-## 💡 Pro Tips
+**Specific Project Queries:**
+- "Show builds for MyProject"
+- "Trigger MyProject_Android on main branch"
+- "What's the status of the iOS build?"
 
-1. **Start with the setup wizard** if it's your first time
-2. **Use natural language** - no need to remember tool names
-3. **The context persists** - it remembers your last project/build
-4. **Combine features** - "Why did yesterday's staging deployment fail?"
-5. **Ask for suggestions** - "What should I do next?"
+**Time-based Queries:**
+- "Show me builds from yesterday"
+- "List failed builds from this morning"
+- "What builds ran overnight?"
 
----
-
-## 🐛 Troubleshooting
-
-### If Natural Language Doesn't Work
-- Try being more specific: "Show TeamCity builds" instead of just "builds"
-- The confidence threshold is 0.7, so very vague queries might not match
-
-### If Wizards Get Stuck
-- You can always restart: "Start over with the setup wizard"
-- Or jump to a specific step: "Go to step 2 of the investigation"
-
-### If Context Is Wrong
-- Clear it explicitly: "Switch to project ABC"
-- Or ask what context is active: "What project am I working with?"
+**Investigation Queries:**
+- "Why did build #12345 fail?"
+- "Show me the error logs for the latest build"
+- "What tests are failing?"
 
 ---
 
-## 📚 Full Feature List to Try
+## 🔧 Troubleshooting
 
-- ✅ Natural language queries
-- ✅ Setup wizard
-- ✅ Investigation wizard
-- ✅ Deployment wizard
-- ✅ Analyze failed builds
-- ✅ Monitor builds
-- ✅ Compare builds
-- ✅ Find breaking changes
-- ✅ Status dashboard
-- ✅ Project hierarchy view
-- ✅ Agent status
-- ✅ Current problems list
-- ✅ Fuzzy project/build search
-- ✅ Time-based filtering
-- ✅ Context persistence
-- ✅ Automatic retries
-- ✅ Response caching
+### If Commands Don't Work
+1. **Check your configuration** - Ensure `TEAMCITY_SERVER_URL` and `TEAMCITY_BEARER_TOKEN` are correct
+2. **Restart Claude Desktop** - Configuration changes require a restart
+3. **Verify network access** - Ensure Claude Desktop can reach your TeamCity server
+4. **Check permissions** - Your bearer token needs appropriate TeamCity permissions
+
+### Common Issues
+
+**"TeamCity client configuration is incomplete"**
+- Missing or incorrect environment variables
+- Check your `claude_desktop_config.json` file
+
+**Connection timeouts**
+- Network connectivity issues
+- TeamCity server may be down
+- Firewall blocking access
+
+**Permission errors**
+- Bearer token lacks required permissions
+- Try with a token that has project admin rights
 
 ---
 
 ## 🎯 Quick Test Checklist
 
-Run through these to verify everything works:
+Verify everything works by trying these commands:
 
-1. [ ] "Check TeamCity connection"
-2. [ ] "Start the setup wizard"
-3. [ ] "Show me recent builds"
-4. [ ] "Why did the last build fail?"
-5. [ ] "Monitor the current build"
-6. [ ] "Find what broke the build"
-7. [ ] "Show the build status dashboard"
-8. [ ] "What agents are available?"
-9. [ ] "Trigger a build for main branch"
-10. [ ] "Compare the last two builds"
+1. [ ] "List my TeamCity projects"
+2. [ ] "Show me recent builds"
+3. [ ] "What agents are connected?"
+4. [ ] "Show me the build queue"
+5. [ ] "Get server information"
+6. [ ] "Show me the status dashboard"
+7. [ ] "Show failed builds from yesterday"
+8. [ ] "List artifacts for build #[recent_build_id]"
 
-Enjoy the new intelligent TeamCity assistant! 🎉
+---
+
+## 📚 Architecture Overview
+
+**Single Tool Design:**
+- One intelligent `teamcity` tool handles all operations
+- Natural language processing leverages Claude's understanding
+- 94% token reduction compared to 30 individual tools
+- Simplified integration and maintenance
+
+**What's Different from v1.x:**
+- No complex wizards or multi-step workflows
+- No context persistence between conversations
+- Direct natural language → action mapping
+- Streamlined responses focused on data
+
+**Benefits:**
+- ✅ Easier to use - just ask naturally
+- ✅ More reliable - fewer moving parts
+- ✅ Better performance - single tool execution
+- ✅ Simpler debugging - one integration point
+
+---
+
+## 🎉 Get Started
+
+Ready to use your TeamCity MCP server? Just start a conversation in Claude Desktop and ask:
+
+```
+"What's happening with my TeamCity builds today?"
+```
+
+The server will handle the rest naturally! 🚀
