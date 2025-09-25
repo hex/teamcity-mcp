@@ -228,7 +228,7 @@ Verify everything works by trying these commands:
 **Single Tool Design:**
 - One intelligent `teamcity` tool handles all operations
 - Natural language processing leverages Claude's understanding
-- 94% token reduction compared to 30 individual tools
+- Streamlined single-tool approach compared to multiple individual tools
 - Simplified integration and maintenance
 
 **What's Different from v1.x:**

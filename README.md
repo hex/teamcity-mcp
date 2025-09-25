@@ -2,6 +2,8 @@
 
 A TypeScript implementation of the TeamCity MCP (Model Context Protocol) server, providing seamless integration with Claude Desktop and Claude Code through natural language. Manage your TeamCity CI/CD operations using simple, conversational commands.
 
+**🎯 MCP Protocol Compliant** | **🚀 Single Tool Architecture**
+
 ## Quick Start
 
 ```bash
@@ -35,7 +37,7 @@ Interact with TeamCity using plain English commands - no need to learn complex A
 - **Production-ready security** with comprehensive error sanitization and rate limiting
 - **TypeScript implementation** with strict type safety
 - **Input validation** using Zod schemas with security limits
-- **MCP protocol compliant** - enhanced compliance with proper JSON schemas, resources, and error handling
+- **MCP protocol compliant** - proper JSON Schema validation, resources, and error handling
 - **Complete TeamCity control** - builds, projects, artifacts, agents, and more
 
 ### 📊 TeamCity Operations

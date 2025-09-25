@@ -2,7 +2,7 @@
 
 /**
  * TeamCity MCP Server - Ultra Simple Natural Language Version
- * Single tool, leverages Claude's built-in NLP - 94% token reduction
+ * Single tool, leverages Claude's built-in NLP
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
     // Create MCP server
     const server = new McpServer({
       name: 'teamcity-mcp-simple',
-      version: '4.2.3'
+      version: '4.2.4'
     });
 
     // Register SINGLE tool that leverages Claude's NLP directly
@@ -527,7 +527,7 @@ async function main(): Promise<void> {
     const transport = new StdioServerTransport();
     await server.connect(transport);
 
-    console.error('TeamCity MCP Simple Server started - Single tool, 94% token reduction!');
+    console.error('TeamCity MCP Simple Server started!');
 
   } catch (error) {
     const safeError = createSafeError(error, { operation: 'server_startup' });

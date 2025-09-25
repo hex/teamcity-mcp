@@ -38,11 +38,11 @@ describe('TeamCity MCP v4.0.0 - Single Tool Architecture', () => {
   });
 });
 
-// Test the revolution: 94% token reduction achieved!
-describe('Architecture Revolution - Token Reduction', () => {
-  it('should demonstrate massive simplification', () => {
-    // v3.0.0 had 20+ tools with complex validation schemas
-    // v4.0.0 has 1 natural language tool - 94% reduction!
+// Test the simplified natural language approach
+describe('Architecture Simplification', () => {
+  it('should demonstrate streamlined design', () => {
+    // Previous version had 20+ tools with complex validation schemas
+    // Current version has 1 natural language tool - major simplification
     const oldToolCount = 20;
     const newToolCount = 1;
     const reduction = ((oldToolCount - newToolCount) / oldToolCount) * 100;

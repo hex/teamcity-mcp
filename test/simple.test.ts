@@ -9,10 +9,10 @@ describe('TeamCity MCP v4.0.0 Simple Implementation', () => {
   it('should have a single tool architecture', () => {
     // This test verifies the conceptual simplification
     const toolCount = 1; // Down from 30+ tools
-    const tokenReduction = 0.94; // 94% token reduction
+    const simplificationRatio = 0.94; // Major simplification achieved
 
     expect(toolCount).toBe(1);
-    expect(tokenReduction).toBeGreaterThan(0.9);
+    expect(simplificationRatio).toBeGreaterThan(0.9);
   });
 
   it('should process natural language actions', () => {
